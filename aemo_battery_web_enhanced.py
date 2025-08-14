@@ -427,6 +427,15 @@ def main():
     """主函数"""
     st.title("⚡ AEMO电池储能优化系统 - 增强版")
     
+    # 添加自定义CSS来调整metric数字字体大小
+    st.markdown("""
+    <style>
+    [data-testid="metric-container"] [data-testid="metric-value"] {
+        font-size: 1.5rem !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
     # 周期类型选择（顶部）
     st.markdown("---")
     col1, col2, col3 = st.columns([1, 2, 1])
@@ -529,7 +538,7 @@ def main():
         col1, col2, col3, col4, col5, col6 = st.columns(6)
         
         with col1:
-            st.metric("📊 总收益", f"{total_profit:.2f}", delta=None)
+            st.metric("📊 总收益", f"{total_profit:.2f} AUD", delta=None)
         
         with col2:
             st.metric("🔋 总充电量", f"{total_charge:.1f} kWh", delta=None)
@@ -556,7 +565,7 @@ def main():
         col1, col2, col3, col4, col5 = st.columns(5)
         
         with col1:
-            st.metric("📊 总收益", f"{total_profit:.2f}", delta=None)
+            st.metric("📊 总收益", f"{total_profit:.2f} AUD", delta=None)
         
         with col2:
             st.metric("🔋 总充电量", f"{total_charge:.1f} kWh", delta=None)
