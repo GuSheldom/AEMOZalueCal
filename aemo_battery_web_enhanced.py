@@ -6,7 +6,6 @@ AEMO电池储能优化系统 - 增强Web版本 (Streamlit)
 
 import streamlit as st
 import pandas as pd
-import numpy as np
 import glob
 import plotly.express as px
 import plotly.graph_objects as go
@@ -420,94 +419,9 @@ def get_period_display_name(period_type: str, selected_period: str) -> str:
         return f"年度周期: {selected_period}"
     return selected_period
 
-def calculate_optimal_z_for_period(period_data: pd.DataFrame, period_type: str, selected_period: str) -> Tuple[float, float]:
-    """计算给定周期数据的最优Z值和对应的最大收益"""
-    if len(period_data) == 0:
-        return 0.0, 0.0
-    
-    # 获取所有唯一的日周期
-    unique_cycles = period_data["Cycle_Date"].unique()
-    
-    # 测试不同的Z值 (从0到30，步长0.5)
-    z_values = np.arange(0.0, 30.1, 0.5)
-    best_z = 0.0
-    best_total_profit = 0.0
-    
-    print(f"🔍 正在计算{period_type} {selected_period}的最优Z值...")
-    
-    for z in z_values:
-        total_profit = 0.0
-        
-        # 对每个日周期计算收益
-        for cycle_date in unique_cycles:
-            cycle_data = period_data[period_data["Cycle_Date"] == cycle_date]
-            
-            charge_data = cycle_data[cycle_data["Phase"] == "charge"]
-            discharge_data = cycle_data[cycle_data["Phase"] == "discharge"]
-            
-            if len(charge_data) == 0 or len(discharge_data) == 0:
-                continue
-            
-            charge_prices = charge_data["Price_RRP"].tolist()
-            discharge_prices = discharge_data["Price_RRP"].tolist()
-            
-            _, _, cycle_profit = solve_cycle_with_z(charge_prices, discharge_prices, z)
-            total_profit += cycle_profit
-        
-        if total_profit > best_total_profit:
-            best_total_profit = total_profit
-            best_z = z
-    
-    print(f"✅ {period_type} {selected_period} 最优Z值: {best_z:.1f}, 最大收益: {best_total_profit:.2f}")
-    return best_z, best_total_profit
 
-@st.cache_data
-def get_optimal_z_cache(period_data_hash: str, period_type: str, selected_period: str) -> Tuple[float, float]:
-    """缓存最优Z值计算结果"""
-    # 这个函数会被Streamlit缓存，避免重复计算
-    return calculate_optimal_z_for_period_cached(period_data_hash, period_type, selected_period)
 
-def calculate_optimal_z_for_period_cached(period_data_hash: str, period_type: str, selected_period: str) -> Tuple[float, float]:
-    """实际的最优Z值计算（用于缓存）"""
-    # 重新加载数据（因为缓存函数不能直接传DataFrame）
-    all_data = st.session_state.all_data
-    period_data = filter_data_by_period_boundaries(all_data, period_type, selected_period)
-    
-    if len(period_data) == 0:
-        return 0.0, 0.0
-    
-    # 获取所有唯一的日周期
-    unique_cycles = period_data["Cycle_Date"].unique()
-    
-    # 测试不同的Z值 (从0到30，步长1.0，加快计算)
-    z_values = np.arange(0.0, 30.1, 1.0)
-    best_z = 0.0
-    best_total_profit = 0.0
-    
-    for z in z_values:
-        total_profit = 0.0
-        
-        # 对每个日周期计算收益
-        for cycle_date in unique_cycles:
-            cycle_data = period_data[period_data["Cycle_Date"] == cycle_date]
-            
-            charge_data = cycle_data[cycle_data["Phase"] == "charge"]
-            discharge_data = cycle_data[cycle_data["Phase"] == "discharge"]
-            
-            if len(charge_data) == 0 or len(discharge_data) == 0:
-                continue
-            
-            charge_prices = charge_data["Price_RRP"].tolist()
-            discharge_prices = discharge_data["Price_RRP"].tolist()
-            
-            _, _, cycle_profit = solve_cycle_with_z(charge_prices, discharge_prices, z)
-            total_profit += cycle_profit
-        
-        if total_profit > best_total_profit:
-            best_total_profit = total_profit
-            best_z = z
-    
-    return best_z, best_total_profit
+
 
 def main():
     """主函数"""
@@ -557,31 +471,7 @@ def main():
     optimal_z = None
     optimal_profit = None
     
-    if period_type in ["季度", "半年", "年"]:
-        with st.sidebar.expander("🎯 最优Z值计算", expanded=True):
-            if st.button("计算最优Z值", type="secondary"):
-                with st.spinner(f"正在计算{period_type} {selected_period}的最优Z值..."):
-                    period_data_for_calc = filter_data_by_period_boundaries(all_data, period_type, selected_period)
-                    # 创建数据哈希用于缓存
-                    data_hash = str(hash(str(period_data_for_calc.values.tobytes())))
-                    optimal_z, optimal_profit = get_optimal_z_cache(data_hash, period_type, selected_period)
-                    st.session_state[f'optimal_z_{period_type}_{selected_period}'] = optimal_z
-                    st.session_state[f'optimal_profit_{period_type}_{selected_period}'] = optimal_profit
-            
-            # 显示已计算的最优Z值
-            cache_key_z = f'optimal_z_{period_type}_{selected_period}'
-            cache_key_profit = f'optimal_profit_{period_type}_{selected_period}'
-            
-            if cache_key_z in st.session_state:
-                optimal_z = st.session_state[cache_key_z]
-                optimal_profit = st.session_state[cache_key_profit]
-                st.success(f"🎯 最优Z值: **{optimal_z:.1f}**")
-                st.info(f"💰 最大收益: **{optimal_profit:.2f}**")
-                
-                # 提供快速设置按钮
-                if st.button("📌 使用最优Z值", type="primary"):
-                    st.session_state['z_value'] = optimal_z
-                    st.rerun()
+
     
     # Z值输入
     z_value = st.sidebar.number_input(
