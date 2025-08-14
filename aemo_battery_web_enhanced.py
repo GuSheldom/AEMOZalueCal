@@ -427,11 +427,47 @@ def main():
     """主函数"""
     st.title("⚡ AEMO电池储能优化系统 - 增强版")
     
-    # 添加自定义CSS来调整metric数字字体大小
+    # 添加自定义CSS来调整整体页面字体大小
     st.markdown("""
     <style>
+    /* 调整metric数字字体大小 */
     [data-testid="metric-container"] [data-testid="metric-value"] {
-        font-size: 0.7rem !important;
+        font-size: 1.0rem !important;
+    }
+    
+    /* 全局字体缩小 */
+    .main .block-container {
+        font-size: 0.85rem;
+    }
+    
+    /* 调整表格字体 */
+    .dataframe {
+        font-size: 0.8rem !important;
+    }
+    
+    /* 调整侧边栏字体 */
+    .css-1d391kg {
+        font-size: 0.85rem;
+    }
+    
+    /* 调整selectbox和其他控件字体 */
+    .stSelectbox > div > div {
+        font-size: 0.85rem;
+    }
+    
+    /* 调整metric标签字体 */
+    [data-testid="metric-container"] [data-testid="metric-label"] {
+        font-size: 0.8rem !important;
+    }
+    
+    /* 调整subheader字体 */
+    .css-10trblm {
+        font-size: 1.1rem !important;
+    }
+    
+    /* 调整普通文本 */
+    p, div, span {
+        font-size: 0.85rem;
     }
     </style>
     """, unsafe_allow_html=True)
