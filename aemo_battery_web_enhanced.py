@@ -431,7 +431,7 @@ def main():
     st.markdown("""
     <style>
     [data-testid="metric-container"] [data-testid="metric-value"] {
-        font-size: 1.5rem !important;
+        font-size: 1.2rem !important;
     }
     </style>
     """, unsafe_allow_html=True)
