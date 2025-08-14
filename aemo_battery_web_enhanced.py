@@ -457,7 +457,7 @@ def main():
     
     /* 调整metric标签字体 */
     [data-testid="metric-container"] [data-testid="metric-label"] {
-        font-size: 0.8rem !important;
+        font-size: 1.2rem !important;
     }
     
     /* 调整subheader字体 */
