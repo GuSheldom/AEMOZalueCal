@@ -300,6 +300,12 @@ def solve_cycle_with_z(charge_prices: List[float], discharge_prices: List[float]
             if discharge_vars:
                 prob += pulp.lpSum(discharge_vars) <= discharge_rate
         
+        # 3. 储能容量约束 - 确保任何时刻的累计储能不超过最大容量
+        # 总充电量不能超过最大储能容量
+        all_charge_vars = [x[i, j] for i in range(n_charge) for j in range(n_discharge) if (i, j) in x]
+        if all_charge_vars:
+            prob += pulp.lpSum(all_charge_vars) <= max_capacity
+        
         # 求解
         prob.solve(pulp.PULP_CBC_CMD(msg=0))
         
