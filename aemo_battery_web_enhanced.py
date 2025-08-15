@@ -257,7 +257,8 @@ def filter_data_by_period_boundaries(df: pd.DataFrame, period_type: str, selecte
     return filtered_df
 
 def solve_cycle_with_z(charge_prices: List[float], discharge_prices: List[float], 
-                      z: float) -> Tuple[List[float], List[float], float]:
+                      z: float, charge_rate: float = 55.83, discharge_rate: float = 200.0, 
+                      max_capacity: float = 5000.0) -> Tuple[List[float], List[float], float]:
     """使用线性规划求解给定Z值下的最优分配"""
     try:
         # 创建线性规划问题
@@ -287,17 +288,17 @@ def solve_cycle_with_z(charge_prices: List[float], discharge_prices: List[float]
             prob += pulp.lpSum(profit_terms)
         
         # 约束条件
-        # 1. 充电时段容量约束 (每个时段最多55.83 kWh)
+        # 1. 充电时段容量约束
         for i in range(n_charge):
             charge_vars = [x[i, j] for j in range(n_discharge) if (i, j) in x]
             if charge_vars:
-                prob += pulp.lpSum(charge_vars) <= 55.83
+                prob += pulp.lpSum(charge_vars) <= charge_rate
         
-        # 2. 放电时段容量约束 (每个时段最多200 kWh)
+        # 2. 放电时段容量约束
         for j in range(n_discharge):
             discharge_vars = [x[i, j] for i in range(n_charge) if (i, j) in x]
             if discharge_vars:
-                prob += pulp.lpSum(discharge_vars) <= 200.0
+                prob += pulp.lpSum(discharge_vars) <= discharge_rate
         
         # 求解
         prob.solve(pulp.PULP_CBC_CMD(msg=0))
@@ -325,13 +326,15 @@ def solve_cycle_with_z(charge_prices: List[float], discharge_prices: List[float]
         st.error(f"求解过程出错: {e}")
         return [0.0] * len(charge_prices), [0.0] * len(discharge_prices), 0.0
 
-def update_period_data_with_z(period_data: pd.DataFrame, z_value: float, period_type: str) -> pd.DataFrame:
+def update_period_data_with_z(period_data: pd.DataFrame, z_value: float, period_type: str,
+                             charge_rate: float = 55.83, discharge_rate: float = 200.0, 
+                             max_capacity: float = 5000.0) -> pd.DataFrame:
     """根据新的Z值更新周期数据（支持多天数据）"""
     updated_data = period_data.copy()
     
     if period_type == "天":
         # 单天处理（原逻辑）
-        return update_single_cycle_with_z(updated_data, z_value)
+        return update_single_cycle_with_z(updated_data, z_value, charge_rate, discharge_rate, max_capacity)
     else:
         # 多天处理：按日周期分组处理
         unique_cycles = updated_data["Cycle_Date"].unique()
@@ -339,12 +342,14 @@ def update_period_data_with_z(period_data: pd.DataFrame, z_value: float, period_
         
         for cycle_date in unique_cycles:
             cycle_data = updated_data[updated_data["Cycle_Date"] == cycle_date].copy()
-            updated_cycle = update_single_cycle_with_z(cycle_data, z_value)
+            updated_cycle = update_single_cycle_with_z(cycle_data, z_value, charge_rate, discharge_rate, max_capacity)
             all_updated_data.append(updated_cycle)
         
         return pd.concat(all_updated_data, ignore_index=True)
 
-def update_single_cycle_with_z(cycle_data: pd.DataFrame, z_value: float) -> pd.DataFrame:
+def update_single_cycle_with_z(cycle_data: pd.DataFrame, z_value: float, 
+                               charge_rate: float = 55.83, discharge_rate: float = 200.0, 
+                               max_capacity: float = 5000.0) -> pd.DataFrame:
     """更新单个日周期的数据"""
     updated_data = cycle_data.copy()
     
@@ -361,7 +366,7 @@ def update_single_cycle_with_z(cycle_data: pd.DataFrame, z_value: float) -> pd.D
     
     # 求解优化问题
     charge_energy, discharge_energy, total_profit = solve_cycle_with_z(
-        charge_prices, discharge_prices, z_value)
+        charge_prices, discharge_prices, z_value, charge_rate, discharge_rate, max_capacity)
     
     # 重置所有能量值和状态
     updated_data["Z_Value"] = z_value
@@ -397,7 +402,7 @@ def update_single_cycle_with_z(cycle_data: pd.DataFrame, z_value: float) -> pd.D
     cumulative_energy = 0
     for idx in updated_data.index:
         energy = updated_data.at[idx, "Energy_kWh"]
-        cumulative_energy = max(0, cumulative_energy + energy)
+        cumulative_energy = max(0, min(max_capacity, cumulative_energy + energy))
         updated_data.at[idx, "Cumulative_Energy_kWh"] = cumulative_energy
     
     # 设置周期总收益
@@ -527,8 +532,49 @@ def main():
         format="%.1f"
     )
     
-    # 保存Z值到session state
+    # 电池参数设置
+    st.sidebar.markdown("---")
+    st.sidebar.subheader("🔋 电池参数设置")
+    
+    # 充电功率
+    charge_power = st.sidebar.number_input(
+        "⬆️ 充电功率 (kW)",
+        min_value=1.0,
+        value=st.session_state.get('charge_power', 670.0),
+        step=10.0,
+        format="%.1f",
+        help="最大充电功率"
+    )
+    
+    # 放电功率  
+    discharge_power = st.sidebar.number_input(
+        "⬇️ 放电功率 (kW)",
+        min_value=1.0,
+        value=st.session_state.get('discharge_power', 2400.0),
+        step=50.0,
+        format="%.1f",
+        help="最大放电功率"
+    )
+    
+    # 将功率转换为每5分钟时段的能量 (kW * 5min / 60min = kWh)
+    charge_rate = charge_power * 5 / 60  # kW * (5/60) = kWh per 5-minute period
+    discharge_rate = discharge_power * 5 / 60
+    
+    # 最大累计电量
+    max_capacity = st.sidebar.number_input(
+        "📦 最大储能容量 (kWh)",
+        min_value=1.0,
+        value=st.session_state.get('max_capacity', 5000.0),
+        step=10.0,
+        format="%.1f",
+        help="电池最大储能容量"
+    )
+    
+    # 保存参数到session state
     st.session_state['z_value'] = z_value
+    st.session_state['charge_power'] = charge_power
+    st.session_state['discharge_power'] = discharge_power
+    st.session_state['max_capacity'] = max_capacity
     
     # 获取选定周期的数据
     period_data = filter_data_by_period_boundaries(all_data, period_type, selected_period)
@@ -540,14 +586,16 @@ def main():
     # 根据Z值更新数据
     if st.sidebar.button("🔄 重新计算", type="primary"):
         with st.spinner("正在计算最优策略..."):
-            period_data = update_period_data_with_z(period_data, z_value, period_type)
+            period_data = update_period_data_with_z(period_data, z_value, period_type, 
+                                                  charge_rate, discharge_rate, max_capacity)
             st.session_state.current_period_data = period_data
     
     # 使用缓存的数据或原始数据
     if 'current_period_data' in st.session_state:
         display_data = st.session_state.current_period_data
     else:
-        display_data = update_period_data_with_z(period_data, z_value, period_type)
+        display_data = update_period_data_with_z(period_data, z_value, period_type,
+                                               charge_rate, discharge_rate, max_capacity)
         st.session_state.current_period_data = display_data
     
     # 计算统计信息
