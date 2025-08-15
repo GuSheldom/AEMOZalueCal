@@ -31,37 +31,37 @@ $$
 - **充电时段电价**：
 
 $$
-p_c^i \;(\text{AUD/MWh}), \quad i \in I
+p_c^i \(\text{AUD/MWh}), \quad i \in I
 $$
 
 - **放电时段电价**：
 
 $$
-p_d^j \;(\text{AUD/MWh}), \quad j \in J
+p_d^j \(\text{AUD/MWh}), \quad j \in J
 $$
 
 - **最低利润阈值**：
 
 $$
-z \;(\text{AUD/MWh})
+z \(\text{AUD/MWh})
 $$
 
 - **充电功率限制**：
 
 $$
-R_c \;(\text{kWh/时段})
+R_c \(\text{kWh/时段})
 $$
 
 - **放电功率限制**：
 
 $$
-R_d \;(\text{kWh/时段})
+R_d \(\text{kWh/时段})
 $$
 
 - **最大储能容量**：
 
 $$
-C \;(\text{kWh})
+C \(\text{kWh})
 $$
 
 
