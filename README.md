@@ -83,9 +83,7 @@ $$x_{i,j} \geq 0, \quad \forall i \in I, j \in J$$
 $$\max \quad Z = \sum_{i \in I} \sum_{j \in J} \frac{(p_d^j - p_c^i) \cdot x_{i,j}}{1000}$$
 
 其中，
-$$
-\frac{1}{1000}
-$$
+$$\frac{1}{1000}$$
 是单位换算因子，将 AUD/MWh × kWh 转换为 AUD。
 
 ### 2.3 约束条件
