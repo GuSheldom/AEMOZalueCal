@@ -424,5 +424,5 @@ total_revenue = sum(all_profits)
 
 ---
 
-*最后更新时间: 2024年8月*  
+*最后更新时间: 2025年8月*  
 *项目版本: AEMO Battery Energy Storage Optimization v1.0*
