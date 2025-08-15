@@ -522,7 +522,6 @@ def main():
     z_value = st.sidebar.number_input(
         "⚡ Z值",
         min_value=0.0,
-        max_value=100.0,
         value=st.session_state.get('z_value', 0.0),
         step=0.5,
         format="%.1f"
