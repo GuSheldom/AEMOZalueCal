@@ -674,6 +674,12 @@ def main():
     with col_left:
         st.subheader(f"📋 {get_period_display_name(period_type, selected_period)} 详细数据")
         
+        # 为展示计算新增列：充电成本(按周期内电量净累计) 与 周期内累加收益
+        # 确保按时间排序后在各自日周期内做累计
+        display_data = display_data.sort_values(["Cycle_Date", "Timestamp"]).copy()
+        display_data["Charge_Cost"] = display_data.groupby("Cycle_Date")["Energy_kWh"].cumsum()
+        display_data["Cycle_Cum_Revenue"] = display_data.groupby("Cycle_Date")["Cost_Revenue"].cumsum()
+
         # 准备显示用的数据
         display_df = display_data.copy()
         display_df["时间"] = display_df["Timestamp"].dt.strftime("%Y-%m-%d %H:%M")
@@ -681,19 +687,22 @@ def main():
         display_df["电价(RRP)"] = display_df["Price_RRP"].round(2)
         display_df["阶段"] = display_df["Phase"].map({"charge": "充电", "discharge": "放电"})
         display_df["状态"] = display_df["Status"]  # 添加状态列
-        display_df["Z值"] = display_df["Z_Value"].round(1)
+        # 将原“Z值”列替换为“充电成本”（按周期内电量净累计）
+        display_df["充电成本"] = display_df["Charge_Cost"].round(2)
         display_df["电量(kWh)"] = display_df["Energy_kWh"].round(2)
         display_df["累计电量(kWh)"] = display_df["Cumulative_Energy_kWh"].round(2)
         display_df["成本/收益"] = display_df["Cost_Revenue"].round(2)
+        # 将原“周期总收益”列替换为“周期内累加收益”（按周期内累计到当前行），并追加展示“周期总收益”
+        display_df["周期内累加收益"] = display_df["Cycle_Cum_Revenue"].round(2)
         display_df["周期总收益"] = display_df["Cycle_Total_Revenue"].round(2)
         
         # 选择显示列
         if period_type == "天":
-            display_cols = ["时间", "电价(RRP)", "阶段", "状态", "Z值", "电量(kWh)", 
-                           "累计电量(kWh)", "成本/收益", "周期总收益"]
+            display_cols = ["时间", "电价(RRP)", "阶段", "状态", "充电成本", "电量(kWh)", 
+                           "累计电量(kWh)", "成本/收益", "周期内累加收益", "周期总收益"]
         else:
-            display_cols = ["日期", "时间", "电价(RRP)", "阶段", "状态", "Z值", "电量(kWh)", 
-                           "累计电量(kWh)", "成本/收益", "周期总收益"]
+            display_cols = ["日期", "时间", "电价(RRP)", "阶段", "状态", "充电成本", "电量(kWh)", 
+                           "累计电量(kWh)", "成本/收益", "周期内累加收益", "周期总收益"]
         
         # 显示表格
         st.dataframe(
