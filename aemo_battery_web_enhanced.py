@@ -508,6 +508,15 @@ def main():
     
     # 侧边栏控制
     st.sidebar.header("🎛️ 控制面板")
+    # 刷新数据按钮：清空缓存并重新加载Excel文件
+    if st.sidebar.button("🔁 刷新数据", help="清空缓存并重新加载所有Excel数据文件"):
+        try:
+            st.cache_data.clear()
+        except Exception:
+            pass
+        st.session_state.pop('all_data', None)
+        st.session_state.pop('current_period_data', None)
+        st.success("数据缓存已清空，将重新加载数据……")
     
     # 获取周期选项
     period_options = get_available_periods(all_data, period_type)
