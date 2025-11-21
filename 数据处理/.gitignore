@@ -1,0 +1,59 @@
+# Python虚拟环境
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 日志文件
+*.log
+
+# 临时文件和缓存
+*.tmp
+*.temp
+*~
+
+# CSV进度文件（太大）
+*progress*.csv
+
+# 压缩文件
+*.zip
+
+# 不需要的Excel文件
+*VBA*.xlsx
+*动态*.xlsx
+AEMO_Battery_Storage_*.xlsx
+
+# 文本文件（VBA代码）
+*vba*.txt
+comprehensive_vba_code.txt
+
+# 不需要的Python脚本
+*gui.py
+*monitor*.py
+create_*.py
+analyze_*.py
+generate_*.py
+correct_*.py
+reproduce_*.py
+reverse_*.py
+show_*.py
+jul2025_*.py
+format_*.py
+hourly_*.py
+regenerate_*.py
+merge_all_*.py
+
+# 大数据文件
+AEMO_核心数据_合并.csv
+AEMO_所有数据_合并.csv
+AEMO_23to08_extract.csv
+AEMO_23to08_合并所有月份_z0Fast.xlsx
+
+# 小时电价表格
+AEMO_小时电价表格*.csv
+2025Jul_hour0_详细报告.csv 

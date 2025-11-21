@@ -1,0 +1,92 @@
+\section*{Question 1 - Part 2: 求解线性方程组}
+
+\subsection*{问题陈述}
+给定矩阵 $\mathbf{A}$ 和向量 $\mathbf{b}$：
+$$\mathbf{A} = \begin{bmatrix}
+0 & 3 & 0 & 0 & 0 \\
+-2 & 0 & 1 & 0 & 0 \\
+0 & -1 & 0 & -1 & 0 \\
+0 & 0 & -1 & 0 & 4 \\
+0 & 0 & 0 & 1 & 0
+\end{bmatrix}, \quad \mathbf{b} = \begin{bmatrix} b_1 \\ b_2 \\ b_3 \\ b_4 \\ b_5 \end{bmatrix}$$
+
+求解线性方程组 $\mathbf{A}\mathbf{x} = \mathbf{b}$ 的解集 $\{\mathbf{x} : \mathbf{A}\mathbf{x} = \mathbf{b}\}$。
+
+\subsection*{解答步骤}
+
+\textbf{步骤1: 矩阵分析}
+
+首先分析矩阵 $\mathbf{A}$ 的基本性质：
+- 矩阵维度：$5 \times 5$
+- 通过计算可得：$\text{rank}(\mathbf{A}) = 4$（不是满秩）
+- 自由变量个数：$5 - 4 = 1$
+
+\textbf{步骤2: 行简化}
+
+对增广矩阵 $[\mathbf{A}|\mathbf{b}]$ 进行行简化得到：
+
+$$\text{RREF}[\mathbf{A}|\mathbf{b}] = \begin{bmatrix}
+1 & 0 & 0 & 0 & -2 & 0 \\
+0 & 1 & 0 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 & -4 & 0 \\
+0 & 0 & 0 & 1 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 1
+\end{bmatrix}$$
+
+\textbf{步骤3: 解的存在性分析}
+
+从行简化结果的最后一行 $[0 \quad 0 \quad 0 \quad 0 \quad 0 \quad | \quad 1]$ 可以看出：
+
+$$0 = 1$$
+
+这意味着方程组 $\mathbf{A}\mathbf{x} = \mathbf{b}$ 只有在特定条件下才有解。
+
+通过分析原始的行简化过程，我们发现解存在的必要充分条件是：
+$$\boxed{b_5 = 0}$$
+
+\textbf{步骤4: 当 $b_5 = 0$ 时的解}
+
+当 $b_5 = 0$ 时，方程组变为：
+$$\begin{bmatrix}
+0 & 3 & 0 & 0 & 0 \\
+-2 & 0 & 1 & 0 & 0 \\
+0 & -1 & 0 & -1 & 0 \\
+0 & 0 & -1 & 0 & 4 \\
+0 & 0 & 0 & 1 & 0
+\end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \\ x_3 \\ x_4 \\ x_5 \end{bmatrix} = \begin{bmatrix} b_1 \\ b_2 \\ b_3 \\ b_4 \\ 0 \end{bmatrix}$$
+
+从行简化结果可得：
+\begin{align}
+x_1 - 2x_5 &= 0 \quad \Rightarrow \quad x_1 = 2x_5 \\
+x_2 &= 0 \\
+x_3 - 4x_5 &= 0 \quad \Rightarrow \quad x_3 = 4x_5 \\
+x_4 &= 0
+\end{align}
+
+其中 $x_5$ 是自由变量。
+
+\textbf{步骤5: 零空间}
+
+齐次方程组 $\mathbf{A}\mathbf{x} = \mathbf{0}$ 的解（零空间）为：
+$$\text{Null}(\mathbf{A}) = \text{span}\left\{\begin{bmatrix} 2 \\ 0 \\ 4 \\ 0 \\ 1 \end{bmatrix}\right\}$$
+
+\subsection*{最终答案}
+
+线性方程组 $\mathbf{A}\mathbf{x} = \mathbf{b}$ 的解集为：
+
+$$\boxed{
+\{\mathbf{x} : \mathbf{A}\mathbf{x} = \mathbf{b}\} = 
+\begin{cases}
+\emptyset & \text{如果 } b_5 \neq 0 \\
+\left\{t\begin{bmatrix} 2 \\ 0 \\ 4 \\ 0 \\ 1 \end{bmatrix} : t \in \mathbb{R}\right\} & \text{如果 } b_5 = 0
+\end{cases}
+}$$
+
+\subsection*{解释}
+
+1. **当 $b_5 \neq 0$ 时**：方程组无解，因为增广矩阵的秩大于系数矩阵的秩。
+
+2. **当 $b_5 = 0$ 时**：方程组有无穷多解，解集是一条通过原点的直线，方向向量为 $\begin{bmatrix} 2 & 0 & 4 & 0 & 1 \end{bmatrix}^T$。
+
+这是因为矩阵 $\mathbf{A}$ 不可逆（行列式为0），存在非平凡的零空间。
+

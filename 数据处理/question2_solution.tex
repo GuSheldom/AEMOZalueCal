@@ -1,0 +1,149 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{geometry}
+
+\geometry{a4paper, margin=1in}
+
+\title{Question 2: Rock n Roll Die Solution}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\noindent \textbf{Given:} A four-faced die with equal probabilities. Two faces have value 2, one face has value 3, and one face has value 4.
+
+\section*{(a) Probabilities of getting face values 2, 3, and 4 [1 mark]}
+
+Since each face has equal probability $\frac{1}{4}$:
+
+\begin{align}
+P(\text{face value} = 2) &= \frac{2}{4} = \frac{1}{2} \\
+P(\text{face value} = 3) &= \frac{1}{4} \\
+P(\text{face value} = 4) &= \frac{1}{4}
+\end{align}
+
+Verification: $\frac{1}{2} + \frac{1}{4} + \frac{1}{4} = \frac{2}{4} + \frac{1}{4} + \frac{1}{4} = 1$ ✓
+
+\section*{(b) Probability that sum of two independent rolls is 6 [3 marks]}
+
+For the sum to be 6, we need the following combinations:
+\begin{itemize}
+\item $(2, 4)$: $P = \frac{1}{2} \times \frac{1}{4} = \frac{1}{8}$
+\item $(3, 3)$: $P = \frac{1}{4} \times \frac{1}{4} = \frac{1}{16}$
+\item $(4, 2)$: $P = \frac{1}{4} \times \frac{1}{2} = \frac{1}{8}$
+\end{itemize}
+
+Note that $(2, 4)$ and $(4, 2)$ each occur in multiple ways due to the two faces with value 2.
+
+Total probability:
+\begin{align}
+P(\text{sum} = 6) &= 2 \times \frac{1}{8} + \frac{1}{16} + 2 \times \frac{1}{8} \\
+&= \frac{1}{4} + \frac{1}{16} + \frac{1}{4} \\
+&= \frac{4}{16} + \frac{1}{16} + \frac{4}{16} \\
+&= \frac{9}{16}
+\end{align}
+
+\section*{(c) Expected value and variance of product X [5 marks]}
+
+Let $Y$ denote a single roll. First, compute $E[Y]$ and $\text{Var}[Y]$:
+
+\begin{align}
+E[Y] &= 2 \times \frac{1}{2} + 3 \times \frac{1}{4} + 4 \times \frac{1}{4} \\
+&= 1 + \frac{3}{4} + 1 = \frac{11}{4}
+\end{align}
+
+\begin{align}
+E[Y^2] &= 4 \times \frac{1}{2} + 9 \times \frac{1}{4} + 16 \times \frac{1}{4} \\
+&= 2 + \frac{9}{4} + 4 = \frac{8 + 9 + 16}{4} = \frac{33}{4}
+\end{align}
+
+\begin{align}
+\text{Var}[Y] &= E[Y^2] - (E[Y])^2 \\
+&= \frac{33}{4} - \left(\frac{11}{4}\right)^2 \\
+&= \frac{33}{4} - \frac{121}{16} \\
+&= \frac{132 - 121}{16} = \frac{11}{16}
+\end{align}
+
+For the product $X = Y_1 \times Y_2$ where $Y_1$ and $Y_2$ are independent:
+
+\begin{align}
+E[X] &= E[Y_1 \times Y_2] = E[Y_1] \times E[Y_2] \\
+&= \frac{11}{4} \times \frac{11}{4} = \frac{121}{16}
+\end{align}
+
+For the variance, using the formula for independent random variables:
+\begin{align}
+\text{Var}[X] &= E[Y_1]^2 \text{Var}[Y_2] + E[Y_2]^2 \text{Var}[Y_1] + \text{Var}[Y_1] \text{Var}[Y_2] \\
+&= \left(\frac{11}{4}\right)^2 \times \frac{11}{16} + \left(\frac{11}{4}\right)^2 \times \frac{11}{16} + \frac{11}{16} \times \frac{11}{16} \\
+&= \frac{121}{16} \times \frac{11}{16} + \frac{121}{16} \times \frac{11}{16} + \frac{121}{256} \\
+&= 2 \times \frac{1331}{256} + \frac{121}{256} \\
+&= \frac{2662 + 121}{256} = \frac{2783}{256}
+\end{align}
+
+\section*{(d) Probability that three independent rolls are all different [3 marks]}
+
+For three face values to be all different, we need exactly one 2, one 3, and one 4.
+
+The number of arrangements is $3! = 6$: $(2,3,4)$, $(2,4,3)$, $(3,2,4)$, $(3,4,2)$, $(4,2,3)$, $(4,3,2)$.
+
+Each arrangement has probability:
+\begin{align}
+P(\text{one arrangement}) = \frac{1}{2} \times \frac{1}{4} \times \frac{1}{4} = \frac{1}{32}
+\end{align}
+
+Total probability:
+\begin{align}
+P(\text{all different}) = 6 \times \frac{1}{32} = \frac{6}{32} = \frac{3}{16}
+\end{align}
+
+\section*{(e) Expected reward E[R] [4 marks]}
+
+Following the hint, let $R_j$ denote the expected reward from now on, assuming the previous roll was $j$.
+
+Setting up the equations:
+\begin{align}
+R_2 &= 0.5 \times 2 + 0.25 \times (3 + R_3) + 0.25 \times (4 + R_4) \\
+R_3 &= 0.5 \times (2 + R_2) + 0.25 \times 3 + 0.25 \times (4 + R_4) \\
+R_4 &= 0.5 \times (2 + R_2) + 0.25 \times (3 + R_3) + 0.25 \times 4
+\end{align}
+
+Simplifying:
+\begin{align}
+R_2 &= 1.75 + 0.25R_3 + 0.25R_4 \\
+R_3 &= 1.75 + 0.5R_2 + 0.25R_4 \\
+R_4 &= 2 + 0.5R_2 + 0.25R_3
+\end{align}
+
+Solving this system of equations, we get:
+\begin{align}
+R_2 &= \frac{9}{2} \\
+R_3 &= \frac{27}{5} \\
+R_4 &= \frac{28}{5}
+\end{align}
+
+The expected reward at the start of the game:
+\begin{align}
+E[R] &= \frac{1}{2} \times \left(2 + \frac{9}{2}\right) + \frac{1}{4} \times \left(3 + \frac{27}{5}\right) + \frac{1}{4} \times \left(4 + \frac{28}{5}\right) \\
+&= \frac{1}{2} \times \frac{13}{2} + \frac{1}{4} \times \frac{42}{5} + \frac{1}{4} \times \frac{48}{5} \\
+&= \frac{13}{4} + \frac{42}{20} + \frac{48}{20} \\
+&= \frac{13}{4} + \frac{90}{20} \\
+&= \frac{13}{4} + \frac{9}{2} \\
+&= \frac{13 + 18}{4} = \frac{31}{4}
+\end{align}
+
+\section*{Final Answers}
+
+\begin{itemize}
+\item[(a)] $P(2) = \frac{1}{2}$, $P(3) = \frac{1}{4}$, $P(4) = \frac{1}{4}$
+\item[(b)] $P(\text{sum} = 6) = \frac{9}{16}$
+\item[(c)] $E[X] = \frac{121}{16}$, $\text{Var}[X] = \frac{2783}{256}$
+\item[(d)] $P(\text{all different}) = \frac{3}{16}$
+\item[(e)] $E[R] = \frac{31}{4}$
+\end{itemize}
+
+\end{document}

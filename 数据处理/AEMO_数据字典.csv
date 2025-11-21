@@ -1,0 +1,17 @@
+﻿列名,描述,数据类型
+SETTLEMENTDATE,结算日期时间,datetime
+REGION,地区代码(SA1),string
+TOTALDEMAND,总需求(MW),float
+RRP,区域参考价格($/MWh),float
+PERIODTYPE,时段类型,string
+SOURCE_FILE,源文件名,string
+YEAR,年份,int
+MONTH,月份,int
+DAY,日期,int
+HOUR,小时,int
+MINUTE,分钟,int
+WEEKDAY,星期几(0=周一),int
+QUARTER,季度,int
+TRADING_HOUR,交易小时,int
+YEAR_MONTH,年-月,string
+YEAR_MONTH_DAY,年-月-日,string

@@ -1,0 +1,45 @@
+===== Solar + Solarimp Comprehensive Analysis =====
+
+Annual Total Generation: 960697.80 kWh (960.70 MWh)
+Annual Total Revenue: $69143.29
+Average Revenue per kWh: $0.0720
+Capacity Factor: 10.97%
+Simple Payback Period: 14.46 years
+
+Solar vs Solarimp Comparison:
+  Solar Total Generation: 755.00 kWh (0.08%)
+  Solarimp Total Generation: 959942.80 kWh (99.92%)
+  Solar Total Revenue: $86.79 (0.13%)
+  Solarimp Total Revenue: $69056.50 (99.87%)
+
+Monthly Statistics:
+  2024-05: Generation = 127835.60 kWh, Revenue = $11469.49, Revenue per kWh = $0.0897
+  2024-06: Generation = 95443.20 kWh, Revenue = $13921.92, Revenue per kWh = $0.1459
+  2024-07: Generation = 87103.00 kWh, Revenue = $11778.88, Revenue per kWh = $0.1352
+  2024-08: Generation = 80684.50 kWh, Revenue = $4497.09, Revenue per kWh = $0.0557
+  2024-09: Generation = 74091.30 kWh, Revenue = $2234.70, Revenue per kWh = $0.0302
+  2024-10: Generation = 55782.00 kWh, Revenue = $152.62, Revenue per kWh = $0.0027
+  2024-11: Generation = 64957.90 kWh, Revenue = $2241.49, Revenue per kWh = $0.0345
+  2024-12: Generation = 67459.00 kWh, Revenue = $5236.93, Revenue per kWh = $0.0776
+  2025-01: Generation = 67255.40 kWh, Revenue = $2701.15, Revenue per kWh = $0.0402
+  2025-02: Generation = 64549.20 kWh, Revenue = $6815.83, Revenue per kWh = $0.1056
+  2025-03: Generation = 90739.90 kWh, Revenue = $3705.58, Revenue per kWh = $0.0408
+  2025-04: Generation = 84796.80 kWh, Revenue = $4387.62, Revenue per kWh = $0.0517
+
+Seasonal Performance Analysis:
+  Summer: Generation = 199263.60 kWh, Revenue = $14753.91, Revenue per kWh = $0.0740, accounts for 21.34% of annual revenue
+  Autumn: Generation = 303372.30 kWh, Revenue = $19562.69, Revenue per kWh = $0.0645, accounts for 28.29% of annual revenue
+  Winter: Generation = 263230.70 kWh, Revenue = $30197.89, Revenue per kWh = $0.1147, accounts for 43.67% of annual revenue
+  Spring: Generation = 194831.20 kWh, Revenue = $4628.80, Revenue per kWh = $0.0238, accounts for 6.69% of annual revenue
+
+Negative Price Impact Analysis:
+  Revenue from Negative Price Periods: $-12150.49
+  Percentage of Annual Revenue: 17.57%
+  Potential Annual Revenue without Negative Price Impact: $81293.78
+  Potential Payback Period: 12.30 years
+
+Optimization Recommendations:
+  1. Battery Storage Integration: Store energy during negative price periods, release during high price periods
+  2. Price Forecasting and Generation Management: Develop prediction models to reduce generation during extreme negative price periods
+  3. Price Hedging: Hedge price risks through electricity derivatives market
+  4. Direct Supply Agreements: Establish agreements with local industrial users to avoid extreme negative prices in the wholesale market

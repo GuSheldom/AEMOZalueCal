@@ -1,0 +1,402 @@
+
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{geometry}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+\geometry{a4paper, margin=1in}
+
+
+
+\begin{document}
+
+\section*{Question 1 - Part 2: 求解线性方程组}
+
+\subsection*{问题陈述}
+给定矩阵 $\mathbf{A}$ 和向量 $\mathbf{b}$：
+$$\mathbf{A} = \begin{bmatrix}
+0 & 3 & 0 & 0 & 0 \\
+-2 & 0 & 1 & 0 & 0 \\
+0 & -1 & 0 & -1 & 0 \\
+0 & 0 & -1 & 0 & 4 \\
+0 & 0 & 0 & 1 & 0
+\end{bmatrix}, \quad \mathbf{b} = \begin{bmatrix} b_1 \\ b_2 \\ b_3 \\ b_4 \\ b_5 \end{bmatrix}$$
+
+求解线性方程组 $\mathbf{A}\mathbf{x} = \mathbf{b}$ 的解集 $\{\mathbf{x} : \mathbf{A}\mathbf{x} = \mathbf{b}\}$。
+
+\subsection*{解答步骤}
+
+\textbf{步骤1: 矩阵分析}
+
+首先分析矩阵 $\mathbf{A}$ 的基本性质：
+- 矩阵维度：$5 \times 5$
+- 通过计算可得：$\text{rank}(\mathbf{A}) = 4$（不是满秩）
+- 自由变量个数：$5 - 4 = 1$
+
+\textbf{步骤2: 行简化}
+
+对增广矩阵 $[\mathbf{A}|\mathbf{b}]$ 进行行简化得到：
+
+$$\text{RREF}[\mathbf{A}|\mathbf{b}] = \begin{bmatrix}
+1 & 0 & 0 & 0 & -2 & 0 \\
+0 & 1 & 0 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 & -4 & 0 \\
+0 & 0 & 0 & 1 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 1
+\end{bmatrix}$$
+
+\textbf{步骤3: 解的存在性分析}
+
+从行简化结果的最后一行 $[0 \quad 0 \quad 0 \quad 0 \quad 0 \quad | \quad 1]$ 可以看出：
+
+$$0 = 1$$
+
+这意味着方程组 $\mathbf{A}\mathbf{x} = \mathbf{b}$ 只有在特定条件下才有解。
+
+通过分析原始的行简化过程，我们发现解存在的必要充分条件是：
+$$\boxed{b_5 = 0}$$
+
+\textbf{步骤4: 当 $b_5 = 0$ 时的解}
+
+当 $b_5 = 0$ 时，方程组变为：
+$$\begin{bmatrix}
+0 & 3 & 0 & 0 & 0 \\
+-2 & 0 & 1 & 0 & 0 \\
+0 & -1 & 0 & -1 & 0 \\
+0 & 0 & -1 & 0 & 4 \\
+0 & 0 & 0 & 1 & 0
+\end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \\ x_3 \\ x_4 \\ x_5 \end{bmatrix} = \begin{bmatrix} b_1 \\ b_2 \\ b_3 \\ b_4 \\ 0 \end{bmatrix}$$
+
+从行简化结果可得：
+\begin{align}
+x_1 - 2x_5 &= 0 \quad \Rightarrow \quad x_1 = 2x_5 \\
+x_2 &= 0 \\
+x_3 - 4x_5 &= 0 \quad \Rightarrow \quad x_3 = 4x_5 \\
+x_4 &= 0
+\end{align}
+
+其中 $x_5$ 是自由变量。
+
+\textbf{步骤5: 零空间}
+
+齐次方程组 $\mathbf{A}\mathbf{x} = \mathbf{0}$ 的解（零空间）为：
+$$\text{Null}(\mathbf{A}) = \text{span}\left\{\begin{bmatrix} 2 \\ 0 \\ 4 \\ 0 \\ 1 \end{bmatrix}\right\}$$
+
+\subsection*{最终答案}
+
+线性方程组 $\mathbf{A}\mathbf{x} = \mathbf{b}$ 的解集为：
+
+$$\boxed{
+\{\mathbf{x} : \mathbf{A}\mathbf{x} = \mathbf{b}\} = 
+\begin{cases}
+\emptyset & \text{如果 } b_5 \neq 0 \\
+\left\{t\begin{bmatrix} 2 \\ 0 \\ 4 \\ 0 \\ 1 \end{bmatrix} : t \in \mathbb{R}\right\} & \text{如果 } b_5 = 0
+\end{cases}
+}$$
+
+\subsection*{解释}
+
+1. **当 $b_5 \neq 0$ 时**：方程组无解，因为增广矩阵的秩大于系数矩阵的秩。
+
+2. **当 $b_5 = 0$ 时**：方程组有无穷多解，解集是一条通过原点的直线，方向向量为 $\begin{bmatrix} 2 & 0 & 4 & 0 & 1 \end{bmatrix}^T$。
+
+这是因为矩阵 $\mathbf{A}$ 不可逆（行列式为0），存在非平凡的零空间。
+
+\newpage
+
+\section*{(Question 3) }
+
+\section*{(a) Compute gradients $\frac{\partial h}{\partial \theta_j}$ and $\frac{\partial h}{\partial w_j}$ }
+
+Given:
+\begin{align}
+u_1 &= \theta_1 x_1 + \theta_2 x_2 + \theta_3 x_4 + \theta_4 x_5 \\
+u_2 &= \theta_1 x_2 + \theta_2 x_3 + \theta_3 x_5 + \theta_4 x_6 \\
+u_3 &= \theta_1 x_4 + \theta_2 x_5 + \theta_3 x_7 + \theta_4 x_8 \\
+u_4 &= \theta_1 x_5 + \theta_2 x_6 + \theta_3 x_8 + \theta_4 x_9 \\
+h &= \frac{1}{1 + e^{-(w_1 u_1 + w_2 u_2 + w_3 u_3 + w_4 u_4)}}
+\end{align}
+
+Let $z = w_1 u_1 + w_2 u_2 + w_3 u_3 + w_4 u_4$, so $h = \frac{1}{1 + e^{-z}} = \sigma(z)$.
+
+Using the chain rule:
+\begin{align}
+\frac{\partial h}{\partial \theta_j} &= \frac{\partial h}{\partial z} \cdot \frac{\partial z}{\partial \theta_j} \\
+\frac{\partial h}{\partial w_j} &= \frac{\partial h}{\partial z} \cdot \frac{\partial z}{\partial w_j}
+\end{align}
+
+First, compute $\frac{\partial h}{\partial z}$:
+\begin{align}
+\frac{\partial h}{\partial z} = \frac{\partial}{\partial z}\left(\frac{1}{1 + e^{-z}}\right) = \frac{e^{-z}}{(1 + e^{-z})^2} = h(1-h)
+\end{align}
+
+Next, compute $\frac{\partial z}{\partial \theta_j}$:
+\begin{align}
+\frac{\partial z}{\partial \theta_1} &= w_1 x_1 + w_2 x_2 + w_3 x_4 + w_4 x_5 \\
+\frac{\partial z}{\partial \theta_2} &= w_1 x_2 + w_2 x_3 + w_3 x_5 + w_4 x_6 \\
+\frac{\partial z}{\partial \theta_3} &= w_1 x_4 + w_2 x_5 + w_3 x_7 + w_4 x_8 \\
+\frac{\partial z}{\partial \theta_4} &= w_1 x_5 + w_2 x_6 + w_3 x_8 + w_4 x_9
+\end{align}
+
+And $\frac{\partial z}{\partial w_j}$:
+\begin{align}
+\frac{\partial z}{\partial w_1} = u_1, \quad \frac{\partial z}{\partial w_2} = u_2, \quad \frac{\partial z}{\partial w_3} = u_3, \quad \frac{\partial z}{\partial w_4} = u_4
+\end{align}
+
+Therefore:
+\begin{align}
+\frac{\partial h}{\partial \theta_1} &= h(1-h)(w_1 x_1 + w_2 x_2 + w_3 x_4 + w_4 x_5) \\
+\frac{\partial h}{\partial \theta_2} &= h(1-h)(w_1 x_2 + w_2 x_3 + w_3 x_5 + w_4 x_6) \\
+\frac{\partial h}{\partial \theta_3} &= h(1-h)(w_1 x_4 + w_2 x_5 + w_3 x_7 + w_4 x_8) \\
+\frac{\partial h}{\partial \theta_4} &= h(1-h)(w_1 x_5 + w_2 x_6 + w_3 x_8 + w_4 x_9)
+\end{align}
+
+\begin{align}
+\frac{\partial h}{\partial w_1} = h(1-h) u_1, \quad \frac{\partial h}{\partial w_2} = h(1-h) u_2, \quad \frac{\partial h}{\partial w_3} = h(1-h) u_3, \quad \frac{\partial h}{\partial w_4} = h(1-h) u_4
+\end{align}
+
+\section*{(b) Derive the negative log-likelihood function }
+
+For binary classification with training dataset $\{(x_i, y_i)\}_{i=1}^N$ where $x_i \in \mathbb{R}^9$ and $y_i \in \{0,1\}$:
+
+Note that $h_i = h(x_i; \theta, w)$ represents the probability that the image belongs to class 0, i.e., $P(y_i = 0 | x_i) = h_i$.
+
+Therefore:
+- $P(y_i = 0 | x_i) = h_i$
+- $P(y_i = 1 | x_i) = 1 - h_i$
+
+The likelihood for each data point is:
+$$P(y_i | x_i) = h_i^{1-y_i} (1-h_i)^{y_i}$$
+
+The total likelihood is:
+$$L(\theta, w) = \prod_{i=1}^N P(y_i | x_i) = \prod_{i=1}^N h_i^{1-y_i} (1-h_i)^{y_i}$$
+
+Taking the logarithm:
+$$\ell(\theta, w) = \sum_{i=1}^N [(1-y_i) \ln h_i + y_i \ln(1-h_i)]$$
+
+Therefore, the negative log-likelihood function to minimize is:
+$$\boxed{-\ell(\theta, w) = -\sum_{i=1}^N [(1-y_i) \ln h_i + y_i \ln(1-h_i)]}$$
+
+
+\section*{(c) SGD Algorithm with Mini-batch }
+
+\textbf{Mini-batch SGD proceeds by first sampling a batch of datapoints} $\mathcal{B} = \{j_1, j_2, \ldots, j_{32}\}$, \textbf{and then perform the updates}
+
+\begin{align}
+\theta^{t+1} &= \theta^t - \alpha \cdot h_\theta(\theta^t, w^t; \mathcal{B}) \\
+w^{t+1} &= w^t - \alpha \cdot h_w(\theta^t, w^t; \mathcal{B})
+\end{align}
+
+where $h_\theta(\theta^t, w^t; \mathcal{B})$ and $h_w(\theta^t, w^t; \mathcal{B})$ are computed as the average gradients over the batch $\mathcal{B}$:
+
+\begin{align}
+h_\theta(\theta^t, w^t; \mathcal{B}) &= \frac{1}{|\mathcal{B}|} \sum_{j \in \mathcal{B}} h_\theta(\theta^t, w^t; j) \\
+h_w(\theta^t, w^t; \mathcal{B}) &= \frac{1}{|\mathcal{B}|} \sum_{j \in \mathcal{B}} h_w(\theta^t, w^t; j)
+\end{align}
+
+where for each individual sample $j$ in the batch, we need to compute the gradient of the new loss function:
+$$-[(1-y_j) \ln h_j + y_j \ln(1-h_j)]$$
+
+\begin{itemize}
+\item If $y_j = 0$, the loss term is $-\ln h_j$, so by the chain rule,
+\begin{align}
+h_\theta(\theta^t, w^t; j) &= \frac{\partial(-\ln h_j)}{\partial \theta} = -\frac{1}{h_j} \cdot \frac{\partial h_j}{\partial \theta} \\
+&= -\frac{1}{h_j} \cdot h_j(1-h_j) \cdot \frac{\partial z_j}{\partial \theta} \\
+&= -(1-h_j) \cdot \frac{\partial z_j}{\partial \theta}
+\end{align}
+
+\begin{align}
+h_w(\theta^t, w^t; j) &= \frac{\partial(-\ln h_j)}{\partial w} = -\frac{1}{h_j} \cdot \frac{\partial h_j}{\partial w} \\
+&= -\frac{1}{h_j} \cdot h_j(1-h_j) \cdot \frac{\partial z_j}{\partial w} \\
+&= -(1-h_j) \cdot u_j
+\end{align}
+
+\item If $y_j = 1$, the loss term is $-\ln(1-h_j)$, so by the chain rule,
+\begin{align}
+h_\theta(\theta^t, w^t; j) &= \frac{\partial(-\ln(1-h_j))}{\partial \theta} = -\frac{1}{1-h_j} \cdot \frac{\partial(1-h_j)}{\partial \theta} \\
+&= \frac{1}{1-h_j} \cdot h_j(1-h_j) \cdot \frac{\partial z_j}{\partial \theta} \\
+&= h_j \cdot \frac{\partial z_j}{\partial \theta}
+\end{align}
+
+\begin{align}
+h_w(\theta^t, w^t; j) &= \frac{\partial(-\ln(1-h_j))}{\partial w} = -\frac{1}{1-h_j} \cdot \frac{\partial(1-h_j)}{\partial w} \\
+&= \frac{1}{1-h_j} \cdot h_j(1-h_j) \cdot \frac{\partial z_j}{\partial w} \\
+&= h_j \cdot u_j
+\end{align}
+\end{itemize}
+
+
+
+\textbf{Combining both cases:} 
+
+Let's verify the pattern. From the two cases above:
+- When $y_j = 0$: gradient coefficient is $-(1-h_j)$
+- When $y_j = 1$: gradient coefficient is $h_j$
+
+We can write this unified expression as:
+\begin{align}
+h_\theta(\theta^t, w^t; j) &= [y_j h_j - (1-y_j)(1-h_j)] \cdot \frac{\partial z_j}{\partial \theta} \\
+h_w(\theta^t, w^t; j) &= [y_j h_j - (1-y_j)(1-h_j)] \cdot u_j
+\end{align}
+
+Verification:
+- When $y_j = 0$: $0 \cdot h_j - (1-0)(1-h_j) = 0 - (1-h_j) = -(1-h_j)$ ✓
+- When $y_j = 1$: $1 \cdot h_j - (1-1)(1-h_j) = h_j - 0 = h_j$ ✓
+
+\textbf{Further simplification:} Expanding $\frac{\partial z_j}{\partial \theta}$ from part (a), we get the complete gradient expressions:
+
+\begin{align}
+h_{\theta_1}(\theta^t, w^t; j) &= [y_j h_j - (1-y_j)(1-h_j)] \cdot (w_1 x_{j,1} + w_2 x_{j,2} + w_3 x_{j,4} + w_4 x_{j,5}) \\
+h_{\theta_2}(\theta^t, w^t; j) &= [y_j h_j - (1-y_j)(1-h_j)] \cdot (w_1 x_{j,2} + w_2 x_{j,3} + w_3 x_{j,5} + w_4 x_{j,6}) \\
+h_{\theta_3}(\theta^t, w^t; j) &= [y_j h_j - (1-y_j)(1-h_j)] \cdot (w_1 x_{j,4} + w_2 x_{j,5} + w_3 x_{j,7} + w_4 x_{j,8}) \\
+h_{\theta_4}(\theta^t, w^t; j) &= [y_j h_j - (1-y_j)(1-h_j)] \cdot (w_1 x_{j,5} + w_2 x_{j,6} + w_3 x_{j,8} + w_4 x_{j,9})
+\end{align}
+
+\begin{align}
+h_{w_1}(\theta^t, w^t; j) &= [y_j h_j - (1-y_j)(1-h_j)] \cdot u_{j,1} \\
+h_{w_2}(\theta^t, w^t; j) &= [y_j h_j - (1-y_j)(1-h_j)] \cdot u_{j,2} \\
+h_{w_3}(\theta^t, w^t; j) &= [y_j h_j - (1-y_j)(1-h_j)] \cdot u_{j,3} \\
+h_{w_4}(\theta^t, w^t; j) &= [y_j h_j - (1-y_j)(1-h_j)] \cdot u_{j,4}
+\end{align}
+
+where $u_{j,k}$ represents the $k$-th component of $u_j$ for sample $j$.
+
+
+\newpage
+
+\section*{Question 4: Validation and Grid Search }
+
+
+
+\subsection*{Validation and Grid Search Pipeline}
+
+\textbf{1. Data Split}
+\begin{itemize}
+\item Training set: for training model parameters $\theta$
+\item Validation set: for selecting hyperparameters $d$ and $\lambda$  
+\item Test set: for final performance evaluation
+\end{itemize}
+
+\textbf{2. Hyperparameter Grid Search}
+\begin{itemize}
+\item List of Polynomial degree: $d \in \{1, 2, 3, 4, 5, \ldots\}$
+\item List of Ridge parameter: $\lambda $
+\item Grid search make the process of exhaustively traversing hyperparameter combinations in a systematic way to find the optimal set (specified below).
+\end{itemize}
+
+\textbf{3. K-fold Cross Validation}
+For each hyperparameter combination $(d, \lambda)$:
+\begin{enumerate}
+\item Construct feature matrix  $\Phi_{ij} = x_i (\log x_i)^j$
+\item Use K-fold cross validation to evaluate performance
+\item Select $(d^*, \lambda^*)$ with minimum validation error
+\end{enumerate}
+
+\subsection*{Loss Function}
+The loss function to minimize:
+$$\boxed{L(\theta) = \frac{1}{2N} \sum_{i=1}^N \left(y_i - \sum_{j=0}^{d} \theta_j x_i (\log x_i)^j\right)^2 + \lambda \sum_{j=0}^{d} \theta_j^2}$$
+
+\subsection*{SGD Algorithm Usage}
+
+\textbf{Usage Location:} SGD is used to optimize model parameters $\theta$ for each hyperparameter combination
+
+\textbf{Gradient Computation:}
+$$\frac{\partial L}{\partial \theta_j} = \frac{1}{N} \sum_{i=1}^N (\hat{y}_i - y_i) x_i (\log x_i)^j + 2\lambda \theta_j$$
+
+\textbf{Mini-batch Update:}
+$$\theta_j^{(t+1)} = \theta_j^{(t)} - \alpha \left[\frac{1}{|\mathcal{B}|} \sum_{i \in \mathcal{B}} (\hat{y}_i - y_i) x_i (\log x_i)^j + 2\lambda \theta_j^{(t)}\right]$$
+
+where $\hat{y}_i = \sum_{j=0}^{d} \theta_j x_i (\log x_i)^j$ is the predicted value.
+
+
+
+
+\newpage
+
+\section*{Question 5: Convex Functions }
+
+\subsection*{(a) Prove $f_1(z) = e^z$ is convex using midpoint trick }
+
+We need to prove that for any $z_1, z_2 \in \mathbb{R}$:
+$$f_1\left(\frac{z_1 + z_2}{2}\right) \leq \frac{f_1(z_1) + f_1(z_2)}{2}$$
+
+That is:
+$$e^{(z_1 + z_2)/2} \leq \frac{e^{z_1} + e^{z_2}}{2}$$
+
+\textbf{Proof:}
+We use the  Arithmetic Mean - Geometric Mean (AM-GM) inequality: for any positive numbers $a, b$,
+$$\frac{a + b}{2} \geq \sqrt{ab}$$
+
+Let $a = e^{z_1}$ and $b = e^{z_2}$ . 
+$$\frac{e^{z_1} + e^{z_2}}{2} \geq \sqrt{e^{z_1} \cdot e^{z_2}} = \sqrt{e^{z_1 + z_2}} = e^{(z_1 + z_2)/2}$$
+
+Therefore: $e^{(z_1 + z_2)/2} \leq \frac{e^{z_1} + e^{z_2}}{2}$, proving that $f_1(z) = e^z$ is convex. 
+
+\subsection*{(b) Why midpoint trick suffices for convex continuous function}
+
+For continuous functions, midpoint convexity implies general convexity through the following argument:
+
+\textbf{Key Insight:} If $f$ satisfies the midpoint property:
+$$f\left(\frac{x + y}{2}\right) \leq \frac{f(x) + f(y)}{2}$$
+
+Then by induction, this extends to all dyadic rational numbers $\alpha = k/2^n$ where $k \in \{0, 1, \ldots, 2^n\}$.
+
+\textbf{Dyadic Rationals: }
+Define $D_n = \{k/2^n : k = 0, 1, \ldots, 2^n\}$ and $D = \bigcup_{n=0}^{\infty} D_n$.
+
+\textbf{Base case:} For $\alpha \in D_1 = \{0,1/2, 1\}$, convexity holds (boundary cases and given midpoint property).
+
+\textbf{Inductive step:} Assume convexity holds for all $\alpha \in D_n$. For $\alpha \in D_{n+1} \setminus D_n$, we have $\alpha = (2k+1)/2^{n+1}$ for some integer $k$.
+
+Set $\alpha_1 = k/2^n$ and $\alpha_2 = (k+1)/2^n$ (both in $D_n$), so $\alpha = (\alpha_1 + \alpha_2)/2$.
+
+Define $z_1 = \alpha_1 x + (1-\alpha_1)y$ and $z_2 = \alpha_2 x + (1-\alpha_2)y$.
+
+Then $\alpha x + (1-\alpha)y = (z_1 + z_2)/2$.
+
+By midpoint convexity and inductive hypothesis:
+\begin{align}
+f(\alpha x + (1-\alpha)y) &= f\left(\frac{z_1 + z_2}{2}\right) \leq \frac{f(z_1) + f(z_2)}{2} \\
+&\leq \frac{\alpha_1 f(x) + (1-\alpha_1)f(y) + \alpha_2 f(x) + (1-\alpha_2)f(y)}{2} \\
+&= \frac{\alpha_1 + \alpha_2}{2} f(x) + \frac{2 - \alpha_1 - \alpha_2}{2} f(y) \\
+&= \alpha f(x) + (1-\alpha) f(y)
+\end{align}
+
+
+
+Since dyadic rationals are dense in $[0,1]$ and $f$ is continuous, the convexity inequality:
+$$f(\alpha x + (1-\alpha)y) \leq \alpha f(x) + (1-\alpha) f(y)$$
+holds for all $\alpha \in [0,1]$ by continuity. $\square$
+
+\subsection*{(c) Prove  using convex function definition [5 marks]}
+
+\textbf{To prove:} For a convex function $f: \mathbb{R} \to \mathbb{R}$ and random variable $X: \Omega \to \mathbb{R}$:
+$$\mathbb{E}[f(X)] \geq f(\mathbb{E}[X])$$
+
+\textbf{Proof:}
+Since $(\Omega, p)$ is a discrete probability distribution with finite $|\Omega|$, we can write:
+$$\mathbb{E}[X] = \sum_{\omega \in \Omega} p(\omega) X(\omega)$$
+$$\mathbb{E}[f(X)] = \sum_{\omega \in \Omega} p(\omega) f(X(\omega))$$
+
+By the definition of convex functions, for any weights $\lambda_i \geq 0$ with $\sum_{i} \lambda_i = 1$ and points $x_i$:
+$$f\left(\sum_i \lambda_i x_i\right) \leq \sum_i \lambda_i f(x_i)$$
+
+Setting $\lambda_i = p(\omega_i)$ and $x_i = X(\omega_i)$ for $\omega_i \in \Omega$:
+$$f\left(\sum_{\omega \in \Omega} p(\omega) X(\omega)\right) \leq \sum_{\omega \in \Omega} p(\omega) f(X(\omega))$$
+
+This gives us:
+$$f(\mathbb{E}[X]) \leq \mathbb{E}[f(X)]$$
+
+Therefore: $\mathbb{E}[f(X)] \geq f(\mathbb{E}[X])$
+
+\end{document}
+
+
+\end{document}
+
+
+
